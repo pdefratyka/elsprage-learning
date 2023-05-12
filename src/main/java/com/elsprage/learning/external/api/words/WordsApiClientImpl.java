@@ -55,7 +55,8 @@ public class WordsApiClientImpl implements WordsApiClient {
             return requestHeadersSpec.retrieve().bodyToMono(new ParameterizedTypeReference<PacketDTO>() {
             }).timeout(Duration.ofMillis(TIMEOUT)).block();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            //TODO Custom exception
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

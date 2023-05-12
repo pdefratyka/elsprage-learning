@@ -34,9 +34,11 @@ public final class WebClientUtils {
         final Consumer<ClientCodecConfigurer> consumer = clientCodecConfigurer -> {
             clientCodecConfigurer.defaultCodecs().jackson2JsonDecoder(getJsonDecoder(log, objectMapper));
             clientCodecConfigurer.defaultCodecs().jackson2JsonEncoder(getJsonEncoder(log, objectMapper));
+            clientCodecConfigurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024);
         };
 
-        final ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder().codecs(consumer).build();
+        final ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+                .codecs(consumer).build();
         String contextPath = properties.getUrl();
         return WebClient.builder()
                 .clientConnector(clientHttpConnector)
