@@ -37,9 +37,11 @@ public class LearningController {
     public ResponseEntity<PacketsWordsResponse> getPacketsWords(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @PathVariable Long packetId,
-            @RequestParam LearningMode learningMode) {
-        log.info("Get packets words for packetId: {} and mode: {}", packetId, learningMode);
-        final List<LearningWordDTO> words = learningService.getWordsForPacket(token, packetId, learningMode);
+            @RequestParam LearningMode learningMode,
+            @RequestParam boolean repetitionMode
+    ) {
+        log.info("Get packets words for packetId: {} and mode: {} and repetitionMode:{}", packetId, learningMode, repetitionMode);
+        final List<LearningWordDTO> words = learningService.getWordsForPacket(token, packetId, learningMode, repetitionMode);
         final PacketsWordsResponse packetsWordsResponse = new PacketsWordsResponse(words);
         return ResponseEntity.ok(packetsWordsResponse);
     }

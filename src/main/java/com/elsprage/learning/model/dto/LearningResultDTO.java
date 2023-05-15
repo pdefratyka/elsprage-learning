@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +15,7 @@ import java.math.BigDecimal;
 public class LearningResultDTO {
     private Long packetId;
     private BigDecimal score;
+    private Set<WordRepetitionDTO> repetitions;
+    private String learningMode;
+    private boolean repetition;
 }

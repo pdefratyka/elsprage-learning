@@ -1,19 +1,18 @@
 package com.elsprage.learning.persistance.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "learning_result")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class LearningResult {
     @Id
@@ -28,6 +27,12 @@ public class LearningResult {
     private LocalDateTime date;
     @Column
     private BigDecimal score;
+    @Column(name = "learning_mode")
+    private String learningMode;
+    @Column(name = "is_repetition")
+    private boolean isRepetition;
+    @OneToMany(mappedBy = "learningResult", cascade = CascadeType.ALL)
+    private Set<WordRepetition> wordRepetitions;
 }
 
 

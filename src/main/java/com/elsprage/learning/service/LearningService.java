@@ -11,7 +11,7 @@ import java.util.List;
 public interface LearningService {
     List<LearningPacketDTO> getLearningPacketsForUser(String token);
 
-    List<LearningWordDTO> getWordsForPacket(String token, Long packetId, LearningMode learningMode);
+    List<LearningWordDTO> getWordsForPacket(String token, Long packetId, LearningMode learningMode, boolean isRepetition);
 
     LearningResultResponse saveLearningResult(String token, LearningResultDTO learningResultDTO);
 }

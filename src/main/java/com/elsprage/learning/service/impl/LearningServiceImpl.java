@@ -8,10 +8,7 @@ import com.elsprage.learning.model.dto.LearningResultDTO;
 import com.elsprage.learning.model.dto.LearningWordDTO;
 import com.elsprage.learning.model.response.LearningResultResponse;
 import com.elsprage.learning.persistance.entity.LearningResult;
-import com.elsprage.learning.service.JwtService;
-import com.elsprage.learning.service.LearningResultService;
-import com.elsprage.learning.service.LearningService;
-import com.elsprage.learning.service.PacketApiService;
+import com.elsprage.learning.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +28,7 @@ public class LearningServiceImpl implements LearningService {
     private final PacketApiService packetApiService;
     private final LearningResultService learningResultService;
     private final JwtService jwtService;
+    private final RepetitionService repetitionService;
 
     @Override
     public List<LearningPacketDTO> getLearningPacketsForUser(final String token) {
@@ -42,9 +40,12 @@ public class LearningServiceImpl implements LearningService {
     }
 
     @Override
-    public List<LearningWordDTO> getWordsForPacket(String token, Long packetId, LearningMode learningMode) {
+    public List<LearningWordDTO> getWordsForPacket(String token, Long packetId, LearningMode learningMode, boolean isRepetition) {
         final PacketDTO packetDTO = packetApiService.getPacket(token, packetId);
-        final List<WordDTO> words = packetDTO.getWords();
+        List<WordDTO> words = packetDTO.getWords();
+        if (isRepetition) {
+            words = filterToRepetitionWords(token, packetId, learningMode, words);
+        }
         final List<LearningWordDTO> learningWords = mapLearningWords(words, learningMode);
         Collections.shuffle(learningWords);
         return learningWords;
@@ -86,6 +87,7 @@ public class LearningServiceImpl implements LearningService {
     private LearningResult getLastLearningResult(final Long packetId, final Set<LearningResult> learningResults) {
         return learningResults.stream()
                 .filter(learningResult -> learningResult.getPacketId().equals(packetId))
+                .filter(learningResult -> !learningResult.isRepetition())
                 .max(Comparator.comparing(LearningResult::getDate))
                 .orElse(new LearningResult());
     }
@@ -93,6 +95,7 @@ public class LearningServiceImpl implements LearningService {
     private BigDecimal getBestScore(final Long packetId, final Set<LearningResult> learningResults) {
         return learningResults.stream()
                 .filter(learningResult -> learningResult.getPacketId().equals(packetId))
+                .filter(learningResult -> !learningResult.isRepetition())
                 .map(LearningResult::getScore)
                 .max(BigDecimal::compareTo)
                 .orElse(null);
@@ -117,5 +120,12 @@ public class LearningServiceImpl implements LearningService {
                 .sound(word.getSound())
                 .image(word.getImageDataEncoded())
                 .build()).collect(Collectors.toList());
+    }
+
+    private List<WordDTO> filterToRepetitionWords(final String token, final Long packetId, final LearningMode learningMode, final List<WordDTO> allWords) {
+        final List<Long> wordsWithRepetitions = repetitionService.getWordsIdsForRepetition(token, packetId, learningMode);
+        return allWords.stream()
+                .filter(word -> wordsWithRepetitions.contains(word.getId()))
+                .collect(Collectors.toList());
     }
 }
