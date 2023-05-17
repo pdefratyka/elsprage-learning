@@ -17,4 +17,6 @@ public class LearningPacketDTO {
     private LocalDateTime lastLearned;
     private BigDecimal lastScore;
     private BigDecimal bestScore;
+    private Long numberOfRepetitionsOfValueToTranslation;
+    private Long numberOfRepetitionsOfTranslationToValue;
 }

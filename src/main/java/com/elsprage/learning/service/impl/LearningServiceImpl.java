@@ -72,6 +72,8 @@ public class LearningServiceImpl implements LearningService {
     private LearningPacketDTO getLearningPacket(final PacketDTO packet, final Set<LearningResult> learningResults) {
         final LearningResult lastLearningResult = getLastLearningResult(packet.getId(), learningResults);
         final BigDecimal bestScore = getBestScore(packet.getId(), learningResults);
+        final Long numberOfRepetitionsForValueToTranslation = numberOfRepetitionsForValueToTranslation(packet.getId(), learningResults);
+        final Long numberOfRepetitionsForTranslationToValue = numberOfRepetitionsForTranslationToValue(packet.getId(), learningResults);
         return LearningPacketDTO.builder()
                 .packetId(packet.getId())
                 .packetName(packet.getName())
@@ -81,6 +83,8 @@ public class LearningServiceImpl implements LearningService {
                 .lastLearned(lastLearningResult.getDate())
                 .lastScore(lastLearningResult.getScore())
                 .bestScore(bestScore)
+                .numberOfRepetitionsOfTranslationToValue(numberOfRepetitionsForTranslationToValue)
+                .numberOfRepetitionsOfValueToTranslation(numberOfRepetitionsForValueToTranslation)
                 .build();
     }
 
@@ -98,6 +102,24 @@ public class LearningServiceImpl implements LearningService {
                 .filter(learningResult -> !learningResult.isRepetition())
                 .map(LearningResult::getScore)
                 .max(BigDecimal::compareTo)
+                .orElse(null);
+    }
+
+    private Long numberOfRepetitionsForValueToTranslation(final Long packetId, final Set<LearningResult> learningResults) {
+        return learningResults.stream()
+                .filter(learningResult -> learningResult.getPacketId().equals(packetId))
+                .filter(learningResult -> LearningMode.VALUE_TO_TRANSLATION.getValue().equals(learningResult.getLearningMode()))
+                .max(Comparator.comparing(LearningResult::getDate))
+                .map(learningResult -> learningResult.getWordRepetitions().stream().filter(wr -> wr.getNumberOfRepetitions() > 0).count())
+                .orElse(null);
+    }
+
+    private Long numberOfRepetitionsForTranslationToValue(final Long packetId, final Set<LearningResult> learningResults) {
+        return learningResults.stream()
+                .filter(learningResult -> learningResult.getPacketId().equals(packetId))
+                .filter(learningResult -> LearningMode.TRANSLATION_TO_VALUE.getValue().equals(learningResult.getLearningMode()))
+                .max(Comparator.comparing(LearningResult::getDate))
+                .map(learningResult -> learningResult.getWordRepetitions().stream().filter(wr -> wr.getNumberOfRepetitions() > 0).count())
                 .orElse(null);
     }
 
