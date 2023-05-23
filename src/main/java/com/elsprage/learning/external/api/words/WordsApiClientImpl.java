@@ -4,7 +4,7 @@ import com.elsprage.external.api.elsprage.words.PacketDTO;
 import com.elsprage.external.api.elsprage.words.UsersPacketsResponse;
 import com.elsprage.learning.external.api.WebClientUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ClientHttpConnector;
@@ -15,7 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.time.Duration;
 
 @Service
-@Slf4j
+@Log4j2
 public class WordsApiClientImpl implements WordsApiClient {
 
     private final WebClient webClient;

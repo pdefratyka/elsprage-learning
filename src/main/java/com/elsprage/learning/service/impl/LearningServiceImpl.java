@@ -10,7 +10,7 @@ import com.elsprage.learning.model.response.LearningResultResponse;
 import com.elsprage.learning.persistance.entity.LearningResult;
 import com.elsprage.learning.service.*;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
+@Log4j2
 @AllArgsConstructor
 public class LearningServiceImpl implements LearningService {
 

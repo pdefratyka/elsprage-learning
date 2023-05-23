@@ -9,7 +9,7 @@ import com.elsprage.learning.model.response.LearningResultResponse;
 import com.elsprage.learning.model.response.PacketsWordsResponse;
 import com.elsprage.learning.service.LearningService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/learning")
 @AllArgsConstructor
-@Slf4j
+@Log4j2
 public class LearningController {
 
     private final LearningService learningService;
