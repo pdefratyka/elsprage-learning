@@ -130,7 +130,7 @@ public class LearningServiceImpl implements LearningService {
                     .value(word.getTranslation())
                     .answer(word.getValue())
                     .example(word.getExample())
-                    .sound(word.getSound())
+                    .sound(word.getAudioDataEncoded())
                     .image(word.getImageDataEncoded())
                     .build()).collect(Collectors.toList());
         }
@@ -139,7 +139,7 @@ public class LearningServiceImpl implements LearningService {
                 .value(word.getValue())
                 .answer(word.getTranslation())
                 .example(word.getExample())
-                .sound(word.getSound())
+                .sound(word.getAudioDataEncoded())
                 .image(word.getImageDataEncoded())
                 .build()).collect(Collectors.toList());
     }
