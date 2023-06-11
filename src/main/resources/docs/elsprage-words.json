@@ -380,6 +380,12 @@
     "components": {
         "schemas": {
             "WordRequest": {
+                "required": [
+                    "translation",
+                    "translationLanguageId",
+                    "value",
+                    "valueLanguageId"
+                ],
                 "type": "object",
                 "properties": {
                     "id": {
@@ -407,6 +413,9 @@
                         "type": "string"
                     },
                     "example": {
+                        "type": "string"
+                    },
+                    "explanation": {
                         "type": "string"
                     }
                 }
@@ -479,6 +488,9 @@
                     "audioData": {
                         "type": "string",
                         "format": "byte"
+                    },
+                    "explanation": {
+                        "type": "string"
                     }
                 }
             },

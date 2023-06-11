@@ -132,6 +132,7 @@ public class LearningServiceImpl implements LearningService {
                     .example(word.getExample())
                     .sound(word.getAudioDataEncoded())
                     .image(word.getImageDataEncoded())
+                    .explanation(word.getExplanation())
                     .build()).collect(Collectors.toList());
         }
         return words.stream().map(word -> LearningWordDTO.builder()
@@ -141,6 +142,7 @@ public class LearningServiceImpl implements LearningService {
                 .example(word.getExample())
                 .sound(word.getAudioDataEncoded())
                 .image(word.getImageDataEncoded())
+                .explanation(word.getExplanation())
                 .build()).collect(Collectors.toList());
     }
 
