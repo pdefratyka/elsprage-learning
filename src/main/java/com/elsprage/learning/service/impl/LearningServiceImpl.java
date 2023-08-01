@@ -4,11 +4,13 @@ import com.elsprage.external.api.elsprage.words.PacketDTO;
 import com.elsprage.external.api.elsprage.words.WordDTO;
 import com.elsprage.learning.common.enumeration.LearningMode;
 import com.elsprage.learning.model.dto.LearningPacketDTO;
+import com.elsprage.learning.model.dto.LearningPacketsFilter;
 import com.elsprage.learning.model.dto.LearningResultDTO;
 import com.elsprage.learning.model.dto.LearningWordDTO;
 import com.elsprage.learning.model.response.LearningResultResponse;
 import com.elsprage.learning.persistance.entity.LearningResult;
 import com.elsprage.learning.service.*;
+import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -29,14 +31,16 @@ public class LearningServiceImpl implements LearningService {
     private final LearningResultService learningResultService;
     private final JwtService jwtService;
     private final RepetitionService repetitionService;
+    private final PacketsFilterService packetsFilterService;
 
     @Override
-    public List<LearningPacketDTO> getLearningPacketsForUser(final String token) {
+    public List<LearningPacketDTO> getLearningPacketsForUser(final String token, final LearningPacketsFilter learningPacketsFilter) {
         final Long userId = jwtService.extractUserId(token);
         log.info("Get learning packets for user with id: {}", userId);
         final Set<LearningResult> learningResults = learningResultService.getUsersLearningResults(userId);
         final List<PacketDTO> usersPackets = packetApiService.getUsersPackets(token);
-        return getLearningPackets(usersPackets, learningResults);
+        final List<PacketDTO> filteredPackets = packetsFilterService.filterPackets(usersPackets, learningPacketsFilter);
+        return getLearningPackets(filteredPackets, learningResults);
     }
 
     @Override

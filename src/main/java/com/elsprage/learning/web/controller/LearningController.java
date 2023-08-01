@@ -2,6 +2,7 @@ package com.elsprage.learning.web.controller;
 
 import com.elsprage.learning.common.enumeration.LearningMode;
 import com.elsprage.learning.model.dto.LearningPacketDTO;
+import com.elsprage.learning.model.dto.LearningPacketsFilter;
 import com.elsprage.learning.model.dto.LearningResultDTO;
 import com.elsprage.learning.model.dto.LearningWordDTO;
 import com.elsprage.learning.model.response.LearningPacketResponse;
@@ -26,9 +27,14 @@ public class LearningController {
 
     @GetMapping("/packets")
     public ResponseEntity<LearningPacketResponse> getUsersLearningPackets(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam String language) {
         log.info("Get learning packets for user");
-        final List<LearningPacketDTO> learningPackets = learningService.getLearningPacketsForUser(token);
+        final LearningPacketsFilter learningPacketsFilter = LearningPacketsFilter
+                .builder()
+                .language(language)
+                .build();
+        final List<LearningPacketDTO> learningPackets = learningService.getLearningPacketsForUser(token, learningPacketsFilter);
         final LearningPacketResponse learningPacketResponse = new LearningPacketResponse(learningPackets);
         return ResponseEntity.ok(learningPacketResponse);
     }
