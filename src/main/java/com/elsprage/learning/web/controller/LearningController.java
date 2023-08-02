@@ -28,11 +28,15 @@ public class LearningController {
     @GetMapping("/packets")
     public ResponseEntity<LearningPacketResponse> getUsersLearningPackets(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestParam String language) {
+            @RequestParam(required = false) String language,
+            @RequestParam(required = false) boolean isScoreNot100,
+            @RequestParam(required = false) boolean haveRepeats) {
         log.info("Get learning packets for user");
         final LearningPacketsFilter learningPacketsFilter = LearningPacketsFilter
                 .builder()
                 .language(language)
+                .isScoreNot100(isScoreNot100)
+                .haveRepeats(haveRepeats)
                 .build();
         final List<LearningPacketDTO> learningPackets = learningService.getLearningPacketsForUser(token, learningPacketsFilter);
         final LearningPacketResponse learningPacketResponse = new LearningPacketResponse(learningPackets);

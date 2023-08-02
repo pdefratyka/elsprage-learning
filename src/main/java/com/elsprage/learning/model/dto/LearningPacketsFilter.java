@@ -7,4 +7,6 @@ import lombok.Getter;
 @Getter
 public class LearningPacketsFilter {
     private final String language;
+    private final boolean isScoreNot100;
+    private final boolean haveRepeats;
 }

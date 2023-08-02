@@ -10,7 +10,6 @@ import com.elsprage.learning.model.dto.LearningWordDTO;
 import com.elsprage.learning.model.response.LearningResultResponse;
 import com.elsprage.learning.persistance.entity.LearningResult;
 import com.elsprage.learning.service.*;
-import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -39,8 +38,8 @@ public class LearningServiceImpl implements LearningService {
         log.info("Get learning packets for user with id: {}", userId);
         final Set<LearningResult> learningResults = learningResultService.getUsersLearningResults(userId);
         final List<PacketDTO> usersPackets = packetApiService.getUsersPackets(token);
-        final List<PacketDTO> filteredPackets = packetsFilterService.filterPackets(usersPackets, learningPacketsFilter);
-        return getLearningPackets(filteredPackets, learningResults);
+        final List<LearningPacketDTO> learningPackets = getLearningPackets(usersPackets, learningResults);
+        return packetsFilterService.filterPackets(learningPackets, learningPacketsFilter);
     }
 
     @Override
