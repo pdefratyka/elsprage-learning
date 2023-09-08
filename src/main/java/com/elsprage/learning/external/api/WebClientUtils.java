@@ -34,7 +34,7 @@ public final class WebClientUtils {
         final Consumer<ClientCodecConfigurer> consumer = clientCodecConfigurer -> {
             clientCodecConfigurer.defaultCodecs().jackson2JsonDecoder(getJsonDecoder(log, objectMapper));
             clientCodecConfigurer.defaultCodecs().jackson2JsonEncoder(getJsonEncoder(log, objectMapper));
-            clientCodecConfigurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024);
+            clientCodecConfigurer.defaultCodecs().maxInMemorySize(128 * 1024 * 1024);
         };
 
         final ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()

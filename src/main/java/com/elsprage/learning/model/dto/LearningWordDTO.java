@@ -13,4 +13,7 @@ public class LearningWordDTO {
     private final String image;
     private final String sound;
     private final String explanation;
+    private final String explanationAudio;
+    private final String exampleAudio;
+    private final String translationAudio;
 }

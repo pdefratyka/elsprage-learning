@@ -19,7 +19,7 @@ import java.time.Duration;
 public class WordsApiClientImpl implements WordsApiClient {
 
     private final WebClient webClient;
-    private static final int TIMEOUT = 30000;
+    private static final int TIMEOUT = 180000;
 
     public WordsApiClientImpl(final WordsApiProperties wordsApiProperties, final ClientHttpConnector clientHttpConnector) {
         final ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json().build();
@@ -53,7 +53,10 @@ public class WordsApiClientImpl implements WordsApiClient {
                 .accept(MediaType.APPLICATION_JSON);
         try {
             return requestHeadersSpec.retrieve().bodyToMono(new ParameterizedTypeReference<PacketDTO>() {
-            }).timeout(Duration.ofMillis(TIMEOUT)).block();
+            }).timeout(Duration.ofMillis(TIMEOUT))
+                    .block();
+
+
         } catch (Exception e) {
             //TODO Custom exception
             throw new RuntimeException(e.getMessage(), e);
